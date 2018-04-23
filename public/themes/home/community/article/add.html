@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>发表新帖 - {$site_info.site_name|default=''}</title>
+        <meta name="keywords" content="{$site_info.site_seo_keywords|default=''}"/>
+        <meta name="description" content="{$site_info.site_seo_description|default=''}">
+        <include file="public@head"/>
+        <hook name="before_head_end"/>
+    </head>
+
+<body class="body-white">
+
+    <include file="public@nav"/> 
+
+    <div class="layui-container fly-marginTop">
+        <div class="fly-panel" pad20 style="padding-top: 5px;">
+            <!--<div class="fly-none">没有权限</div>-->
+            <div class="layui-form layui-form-pane">
+                <div class="layui-tab layui-tab-brief" lay-filter="user">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this">发表新帖<!-- 编辑帖子 --></li>
+                    </ul>
+                    <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+                        <div class="layui-tab-item layui-show">
+                            <form action="" method="post"> 
+                                <div class="layui-row layui-col-space15 layui-form-item">
+                                    <div class="layui-col-md3">
+                                        <label class="layui-form-label">
+                                            <span class="fontred"> * </span>
+                                            所在专栏
+                                        </label>
+                                        <div class="layui-input-block">
+                                            <select lay-verify="required" name="categories" lay-filter="categories"> 
+                                                <option></option> 
+                                                <php>
+                                                    $where = [ 'parent_id' => 0, 'isshow' => 1 ];
+                                                </php>
+                                                <community:categories where="$where" order="list_order">   
+                                                    <option value="{$vo.id}">{$vo.name}</option>  
+                                                </community:categories>  
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md9">
+                                        <label for="L_title" class="layui-form-label"> 
+                                            <span class="fontred"> * </span>
+                                            标题
+                                        </label>
+                                        <div class="layui-input-block">
+                                            <input type="text" id="L_title" name="post_title" autocomplete="off" class="layui-input" value="谁是这个世界上最美的人？" lay-verify="required"> 
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="layui-row layui-col-space15 layui-form-item">
+                                    <div class="layui-col-md12">
+                                        <label class="layui-form-label" for="L_tags">标签</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" id="L_tags" value="魔镜 大程子" name="tags" placeholder="多个标签用空格分隔" class="layui-input" >
+                                        </div>
+                                    </div> 
+                                </div>
+                                
+                                <div class="layui-form-item layui-form-text">
+                                    <span class="fontred"> * </span>
+                                    <div class="layui-input-block">
+                                        <textarea id="L_content" name="post_content" required lay-verify="required" placeholder="详细描述" class="layui-textarea fly-editor" placeholder="详细描述" style="height: 260px;">大程子是这个世界上最美的人！</textarea> 
+                                    </div>
+                                </div>
+                                
+<!--                                <div class="layui-form-item layui-hide" layui-filter="kissdiv">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">悬赏飞吻</label>
+                                        <div class="layui-input-inline" style="width: 190px;">
+                                            <select name="experience">
+                                                <option value="20">20</option>
+                                                <option value="30">30</option>
+                                                <option value="50">50</option>
+                                                <option value="60">60</option>
+                                                <option value="80">80</option>
+                                            </select>
+                                        </div>
+                                        <div class="layui-form-mid layui-word-aux">发表后无法更改飞吻</div>
+                                    </div>
+                                </div>-->
+                                
+                                <div class="layui-form-item">
+                                    <label for="L_vercode" class="layui-form-label">
+                                        <span class="fontred"> * </span>
+                                        验证码
+                                    </label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="L_vercode" name="vercode" required lay-verify="required|code" autocomplete="off" class="layui-input" value="1234">
+                                    </div> 
+                                    <!--<captcha height="40" width="150" font-size="20" />-->  
+                                    <img src="{:url('/captcha/new')}" onclick="refreshCode()" class="captcha captcha-img verify_img" height="40" width="150" />
+                                </div>
+                                
+                                <div class="layui-form-item">
+                                    <button class="layui-btn" lay-filter="publishForm" lay-submit>立即发布</button>
+                                </div>
+                                
+                            </form> 
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <include file="public@footer"/>
+    
+    <!-- /container -->
+    <include file="public@scripts"/>   
+    
+    <script> 
+  
+        // 刷新验证码
+        function refreshCode() {
+            $('.verify_img').attr("src", '{:url("/captcha/new")}&time=' + Math.random());
+        }   
+         
+        layui.use(['form'], function(){
+            var form = layui.form; 
+                
+            form.verify({  
+                code: function (value) {    
+                    var errmsg = '';
+                    $.ajax({
+                        type: "POST",
+                        url: "/community/article/checkCode",  //后台程序地址
+                        data: { code: value },  //需要post的数据  
+                        async: false,
+                        success: function (msg) {   
+                            if (msg == 'error') {
+                                refreshCode();
+                                errmsg = '验证码错误';
+                            } 
+                        }
+                    }); 
+                    if(errmsg != '') {
+                        return errmsg;
+                    }
+                }
+            });  
+            
+            // 监听下拉框选择事件
+            form.on('select(categories)', function(data){
+                console.log(data);
+            });
+                
+            form.on('submit(publishForm)', function(data){ 
+                // layer.msg(JSON.stringify(data.field)); 
+   
+                $.ajax({
+                    type: "POST", 
+                    url: "/community/article/addPost",  //后台程序地址
+                    data: data.field,  //需要post的数据
+                    success: function(msg){  
+                        if(msg == 'success') {
+                            window.location.href = '/';  
+                        }
+                    },
+                    error: function() {
+                        layer.msg('请求异常，请重试', {shift: 6});
+                    }
+                });  
+                return false;
+            }); 
+             
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+<div class="fly-panel">
+    <div class="fly-panel-title">
+        推广
+    </div>
+    <div class="fly-panel-main">
+        <a href="" target="_blank" class="fly-zanzhu" style="background-color: #393D49;">虚席以待</a>
+    </div>
+</div>
+
+<div class="fly-panel" style="padding: 20px 0; text-align: center;"> 
+    <img src="{:cmf_get_image_preview_url($site_info['site_qr'])}" style="max-width: 50%;" alt="layui"> 
+    <p style="position: relative; color: #666;">扫一扫 联系我 </p> 
+</div>
+
+<div class="fly-panel fly-link">
+    <h3 class="fly-panel-title">友情链接</h3>
+    <dl class="fly-panel-main">
+        <links>
+            <dd><a href="{$vo.url|default=''}" target="{$vo.target|default=''}">{$vo.name|default=''}</a><dd>
+        </links> 
+    </dl>
+</div>

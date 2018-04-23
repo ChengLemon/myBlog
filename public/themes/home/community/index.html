@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>首页 {$site_info.site_name|default=''}</title>
+    <meta name="keywords" content="{$site_info.site_seo_keywords|default=''}"/>
+    <meta name="description" content="{$site_info.site_seo_description|default=''}">
+    <include file="public@head"/>     
+    <hook name="before_head_end"/>
+    
+    <script type="text/javascript"> 
+        $(function(){
+            layer.load();
+        });
+    </script>
+</head>
+
+<body class="body-white">
+    
+    <include file="public@nav"/> 
+
+    <div class="fly-panel fly-column">
+        <div class="layui-container">
+            <ul class="layui-clear">
+                <li class="layui-hide-xs layui-this"><a href="/">首页</a></li>  
+                <php>
+                    $where = [ 'parent_id' => 0, 'isshow' => 1 ];
+                </php>
+                <community:categories where="$where" order="list_order">   
+                    <li>
+                        <a href="{:url('category/index', array('categoryId' => $vo.id))}">
+                            {$vo.name}
+                            <if condition="$key eq 1">
+                                <span class="layui-badge-dot"></span>
+                            </if>
+                        </a>
+                    </li> 
+                </community:categories> 
+                
+                <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li> 
+                <!-- 用户登入后显示 -->
+                <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="user/index.html">我发表的贴</a></li> 
+                <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="user/index.html#collection">我收藏的贴</a></li> 
+            </ul> 
+
+            <div class="fly-column-right layui-hide-xs"> 
+                <span class="fly-search"><i class="layui-icon"></i></span> 
+                <a href="/community/article/add.html" class="layui-btn">发表新帖</a> 
+            </div> 
+            <div class="layui-hide-sm layui-show-xs-block" style="margin-top: -10px; padding-bottom: 10px; text-align: center;"> 
+                <a href="/community/article/add.html" class="layui-btn">发表新帖</a> 
+            </div> 
+        </div>
+    </div>
+
+    <div class="layui-container">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md8">
+                <div class="fly-panel">
+                    <div class="fly-panel-title fly-filter">
+                        <a>置顶</a>
+                        <a href="#signin" class="layui-hide-sm layui-show-xs-block fly-right" id="LAY_goSignin" style="color: #FF5722;">去签到</a>
+                    </div>
+                    <ul class="fly-list"> 
+                        
+                        <foreach name="topArts" item="vo">
+                            
+                            <li>
+                                <a href="user/home.html" class="fly-avatar">
+                                    <if condition="$vo.avatar neq null">
+                                        <img src="{:cmf_get_image_url($vo.avatar)}" alt="{$vo.user_nickname}">
+                                    <else/>
+                                        <img src="__TMPL__/public/notoo.png" alt="{$vo.user_nickname}">
+                                    </if>
+                                </a>
+                                <h2>  
+                                    
+                                    <community:category artid="$vo.id" item="vv">   
+                                        <a class="layui-badge">{$vv.name}</a> 
+                                    </community:category> 
+                                    
+                                    <a class="layui-elip" href="{:url('community/article/detail', array('id' => $vo.id))}">{$vo.post_title}</a>
+                                    
+                                </h2>
+                                <div class="fly-list-info">
+                                    <a href="user/home.html" link>
+                                        <cite>{$vo.user_nickname}</cite>
+                                        <i class="iconfont icon-renzheng" title="认证信息：XXX"></i>
+                                        <i class="layui-badge fly-badge-vip">VIP3</i>
+                                    </a>
+                                    <span>{$vo.update_time}</span>
+
+                                    <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i> {$vo.post_like}</span>
+                                    <!--<span class="layui-badge fly-badge-accept layui-hide-xs">已结</span>-->
+                                    <span class="fly-list-nums"> 
+                                        <i class="iconfont icon-pinglun1" title="回答"></i> {$vo.comms}
+                                    </span>
+                                </div>
+                                <div class="fly-list-badge">
+                                    
+<!--                                    <span class="layui-badge layui-bg-black">置顶</span>
+                                    <span class="layui-badge layui-bg-red">精帖</span>-->
+                                    
+                                </div>
+                            </li>
+                            
+                        </foreach>
+                       
+                    </ul>
+                </div>
+
+                <div id="ajax_return" class="fly-panel" style="margin-bottom: 0;"> 
+                </div>
+                
+            </div>
+            <div class="layui-col-md4">
+
+                <div class="fly-panel">
+                    <h3 class="fly-panel-title">{$rightCate['name']}</h3>
+                    <ul class="fly-panel-main fly-list-static">
+                        <foreach name="$rightArts" item="vo">
+                            <li>
+                                <a class="layui-elip" href="{:url('community/article/detail', array('id' => $vo.id))}" target="_blank">{$vo.post_title}</a>
+                            </li> 
+                        </foreach>
+                    </ul>
+                </div>
+
+
+                <div class="fly-panel fly-signin">
+                    <div class="fly-panel-title">
+                        签到
+                        <i class="fly-mid"></i> 
+                        <a href="javascript:;" class="fly-link" id="LAY_signinHelp">说明</a>
+                        <i class="fly-mid"></i> 
+                        <a href="javascript:;" class="fly-link" id="LAY_signinTop">活跃榜<span class="layui-badge-dot"></span></a>
+                        <span class="fly-signin-days">已连续签到<cite>16</cite>天</span>
+                    </div>
+                    <div class="fly-panel-main fly-signin-main">
+                        <button class="layui-btn layui-btn-danger" id="LAY_signin">今日签到</button>
+                        <span>可获得<cite>5</cite>飞吻</span>
+
+                        <!-- 已签到状态 -->
+                        <!--
+                        <button class="layui-btn layui-btn-disabled">今日已签到</button>
+                        <span>获得了<cite>20</cite>飞吻</span>
+                        -->
+                    </div>
+                </div>
+
+                <div class="fly-panel fly-rank fly-rank-reply" id="LAY_replyRank">
+                    <h3 class="fly-panel-title">回帖周榜</h3>
+                    <dl> 
+                        <empty name="replyTop">
+                            <div class="fly-none">没有相关数据</div> 
+                        </empty>
+                        
+                        <notempty name="replyTop">
+                            <foreach name="replyTop" item="vo">
+                                <dd>
+                                    <a href="user/home.html">
+                                        <if condition="$vo.avatar neq null">
+                                            <img src="{:cmf_get_image_url($vo.avatar)}" alt="{$vo.user_nickname}">
+                                        <else/>
+                                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="{$vo.user_nickname}" />
+                                        </if>
+                                        
+                                        <cite>{$vo.user_nickname}</cite>
+                                        <i>{$vo.comms}次回答</i>
+                                    </a>
+                                </dd> 
+                            </foreach>
+                        </notempty>
+                         
+                    </dl>
+                </div>
+
+                <dl class="fly-panel fly-list-one">
+                    
+                    <dt class="fly-panel-title">本周热议</dt> 
+                    
+                    <empty name="$hotsArts">
+                        <div class="fly-none">没有相关数据</div>
+                    </empty>
+                    
+                    <notempty name="$hotsArts">
+                        <foreach name="$hotsArts" item="vo">
+                            <dd>
+                                <a class="layui-elip" href="{:url('community/article/detail', array('id' => $vo.id))}">{$vo.post_title}</a>
+                                <span><i class="iconfont icon-pinglun1"></i> {$vo.comms}</span>
+                            </dd> 
+                        </foreach>
+                    </notempty>
+                      
+                </dl>
+
+                <include file="public@rightside"/>
+
+            </div>
+        </div>
+    </div>
+ 
+    <include file="public@footer"/>
+    
+    <!-- /container -->
+    <include file="public@scripts"/> 
+    
+    <hook name="before_body_end"/>
+     
+    <script type="text/javascript">
+        var isdone = '';
+        var sorts = '';
+        $(function(){
+            layer.load();
+            // isdone sorts
+            ajax_get_articles(); 
+        }); 
+        
+        function ajax_get_articles() {
+            var ajaxUrl = "/community/index/ajaxarticles"; 
+            $.ajax({
+                type : "POST",
+                url: ajaxUrl,
+                data : {isdone: isdone, sorts: sorts} , // $('#'+tab).serialize(),// 你的formid
+                success: function(data){ 
+                    $("#ajax_return").html('');
+                    $("#ajax_return").append(data);
+                    layer.closeAll('loading');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

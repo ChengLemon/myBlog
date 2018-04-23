@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> {$data['article']['post_title']} {$site_info.site_name|default=''} </title>
+    <meta name="keywords" content="{$data['article']['post_title']} {$site_info.site_seo_keywords|default=''}"/>
+    <meta name="description" content="{$data['article']['post_title']} {$site_info.site_seo_description|default=''}">
+    <include file="public@head"/>
+    <hook name="before_head_end"/> 
+</head>
+
+<body class="body-white">
+
+    <include file="public@nav"/> 
+
+    <div class="fly-panel fly-column">
+        <div class="layui-container">
+            <ul class="layui-clear">
+                <li class="layui-hide-xs <if condition='is_null($Request.param.categoryId)'>layui-this</if>" >
+                    <a href="/">首页</a>
+                </li>  
+                <php>
+                    $where = [ 'parent_id' => 0, 'isshow' => 1 ];
+                </php>
+                <community:categories where="$where" order="list_order">   
+                    <li class='<if condition="$Request.param.categoryId eq $vo.id">layui-this</if>' >
+                        <a href="{:url('category/index', array('categoryId' => $vo.id))}">
+                            {$vo.name}
+                            <if condition="$key eq 1">
+                                <span class="layui-badge-dot"></span>
+                            </if>
+                        </a>
+                    </li> 
+                </community:categories> 
+                
+                <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li> 
+                <!-- 用户登入后显示 -->
+                <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="user/index.html">我发表的贴</a></li> 
+                <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="user/index.html#collection">我收藏的贴</a></li> 
+            </ul> 
+
+            <div class="fly-column-right layui-hide-xs"> 
+                <span class="fly-search"><i class="layui-icon"></i></span> 
+                <a href="/community/article/add.html" class="layui-btn">发表新帖</a> 
+            </div> 
+            <div class="layui-hide-sm layui-show-xs-block" style="margin-top: -10px; padding-bottom: 10px; text-align: center;"> 
+                <a href="/community/article/add.html" class="layui-btn">发表新帖</a> 
+            </div> 
+        </div>
+    </div>
+
+    <div class="layui-container">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md8 content detail">
+                <div class="fly-panel detail-box">
+                    <h1>{$data['article']['post_title']}</h1>
+                    <div class="fly-detail-info">
+                        <!-- <span class="layui-badge">审核中</span> -->
+                        <notempty name="$data['postCategories']">
+                            <foreach name="$data['postCategories']" item="vo">
+                                <span class="layui-badge layui-bg-green fly-detail-column">{$vo}</span>
+                            </foreach> 
+                        </notempty>
+                        <empty name="$data['postCategories']">
+                            <span class="layui-badge layui-bg-green fly-detail-column">**</span>
+                        </empty>
+
+                        <!--<span class="layui-badge" style="background-color: #999;">未结</span>-->
+                        <!-- <span class="layui-badge" style="background-color: #5FB878;">已结</span> -->
+
+                        <!--<span class="layui-badge layui-bg-black">置顶</span>-->
+                        <!--<span class="layui-badge layui-bg-red">精帖</span>-->
+
+<!--                        <div class="fly-admin-box" data-id="123">
+                            <span class="layui-btn layui-btn-xs jie-admin" type="del">删除</span>
+
+                            <span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="1">置顶</span> 
+                             <span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="0" style="background-color:#ccc;">取消置顶</span> 
+
+                            <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="1">加精</span> 
+                             <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="0" style="background-color:#ccc;">取消加精</span> 
+                        </div>-->
+                        <span class="fly-list-nums"> 
+                            <a href="#comment"><i class="iconfont" title="回答">&#xe60c;</i> {$data['article']['comms']}</a>
+                            <i class="iconfont" title="人气">&#xe60b;</i> {$data['article']['post_hits']}
+                        </span>
+                    </div>
+                    <div class="detail-about">
+                        <a class="fly-avatar" href="../user/home.html"> 
+                            <if condition="$data['article']['avatar'] neq null">
+                                <img src="{:cmf_get_image_url($data['article']['avatar'])}" alt="{$data['article']['user_nickname']}" />
+                            <else/>
+                                <img src='__TMPL__/public/assets/images/noavatar.png'  alt="{$data['article']['user_nickname']}" /> 
+                            </if>
+                        </a>
+                        <div class="fly-detail-user">
+                            <a href="../user/home.html" class="fly-link"> 
+                                <cite>{$data['article']['user_nickname']}</cite>
+                                <!--<i class="iconfont icon-renzheng" title="认证信息：{{ rows.user.approve }}"></i>-->
+                                <!--<i class="layui-badge fly-badge-vip">VIP3</i>-->
+                            </a>
+                            <span>{$data['article']['update_time']}</span>
+                        </div>
+                        <div class="detail-hits" id="LAY_jieAdmin" data-id="123">
+                            <!--<span style="padding-right: 10px; color: #FF7200">悬赏：60飞吻</span>-->  
+                            <span class="layui-btn layui-btn-xs jie-admin layui-bg-black" type="edit">
+                                <a href="#comments" name="comments">评论</a>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="detail-body photos">
+                        {$data['article']['post_content']}
+                    </div>
+                    
+                    <div class="fly-detail-info">
+                        标签：
+                        <!-- <span class="layui-badge">审核中</span> -->
+                        <notempty name="$data['postTags']">
+                            <foreach name="$data['postTags']" item="vo">
+                                <span style="color: #666;">#{$vo}#</span> 
+                            </foreach> 
+                        </notempty>
+                        <empty name="$data['postTags']">
+                            <span class="layui-badge layui-bg-green fly-detail-column">**</span>
+                        </empty>  
+                    </div>
+                    
+                </div>
+
+                <div class="fly-panel detail-box" id="flyReply" name="comments">
+                    <fieldset class="layui-elem-field layui-field-title" style="text-align: center;">
+                        <legend>回帖</legend>
+                    </fieldset>
+
+                    <ul class="jieda" id="jieda">
+                        <notempty name="$data['comments']">
+                            <foreach name="$data['comments']" item='vo'>
+                            <li data-id="{$vo['id']}" class="jieda-daan">
+                                <a name="item-{$vo['id']}"></a>
+                                <div class="detail-about detail-about-reply">
+                                    <a class="fly-avatar" href=""> 
+                                        <img src='__TMPL__/public/assets/images/noavatar.png' alt="{$vo['full_name']}"> 
+                                    </a>
+                                    <div class="fly-detail-user">
+                                        <a href="" class="fly-link">
+                                            <cite>{$vo['full_name']}</cite>
+                                            <!--<i class="iconfont icon-renzheng" title="认证信息：XXX"></i>-->
+                                            <!--<i class="layui-badge fly-badge-vip">VIP3</i>-->              
+                                        </a>
+
+                                        <!--<span>(楼主)</span>-->
+                                        <!--
+                                        <span style="color:#5FB878">(管理员)</span>
+                                        <span style="color:#FF9E3F">（社区之光）</span>
+                                        <span style="color:#999">（该号已被封）</span>
+                                        -->
+                                    </div>
+
+                                    <div class="detail-hits">
+                                        <span>{$vo['create_time']}</span>
+                                    </div>
+                                    
+                                    <if condition="$vo['accepted'] eq 1">
+                                        <i class="iconfont icon-caina" title="最佳答案"></i>
+                                    </if>
+                                    
+                                </div>
+                                <div class="detail-body jieda-body photos">
+                                    <p>
+                                        <if condition="$vo['parent_name']">
+                                            <span style="color: #FF5722;">@{$vo['parent_name']}</span> 
+                                        </if>
+                                        {$vo['content']}
+                                    </p>
+                                </div>
+                                <div class="jieda-reply">
+                                    <!-- <span class="jieda-zan zanok" type="zan">
+                                        <i class="iconfont icon-zan"></i>
+                                        <em>{$vo['like']}</em>
+                                    </span> -->
+                                    <span class="layui-reply" lay-filter="toreply" >
+                                        <i class="iconfont icon-svgmoban53"></i>
+                                        回复
+                                    </span>
+                                    <!-- <div class="jieda-admin">
+                                        <span type="edit">编辑</span>
+                                        <span type="del">删除</span>
+                                        <span class="jieda-accept" type="accept">采纳</span>
+                                    </div> -->
+                                </div>
+                            </li>
+                            </foreach> 
+                        </notempty>
+
+                        <!-- 无数据时 -->
+                        <empty name="$data['comments']">
+                            <li class="fly-none">消灭零回复</li> 
+                        </empty>
+                    </ul>
+                    <fieldset class="layui-elem-field layui-field-title" style="text-align: center;">
+                        <legend></legend>
+                    </fieldset>
+                    <div class="layui-form layui-form-pane">
+                        <form action="/community/article/reply" method="post">
+                            
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">名纸：</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="full_name" required lay-verify="required" placeholder="你的名纸" autocomplete="off" class="layui-input" value="cheng">
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">Email：</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="email" required lay-verType="tips" lay-verify="required|email" placeholder="你的邮箱" autocomplete="off" class="layui-input" value="1159@qq.com">
+                                </div>
+                            </div>
+                            
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">Url：</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="iturl" lay-verify="myurl" placeholder="你的网址" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            
+                            <div class="layui-form-item layui-form-text">
+                                <a name="comment"></a>
+                                <div class="layui-input-block">
+                                    <textarea id="L_content" name="content" required lay-verify="required" placeholder="请输入内容"  class="layui-textarea fly-editor" style="height: 150px;">123</textarea>
+                                </div>
+                            </div> 
+                            
+                            <div class="layui-form-item">
+                                <input type="hidden" name="object_id" value="{$data['article']['articleId']}">
+                                <button class="layui-btn" lay-filter="toreply" lay-submit>提交回复</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                </div>
+                
+            </div> 
+
+ 
+            <div class="layui-col-md4">
+                <dl class="fly-panel fly-list-one">
+                    
+                    <dt class="fly-panel-title">本周热议</dt> 
+                    
+                    <empty name="$hotsArts">
+                        <div class="fly-none">没有相关数据</div>
+                    </empty>
+                    
+                    <notempty name="$hotsArts">
+                        <foreach name="$hotsArts" item="vo">
+                            <dd>
+                                <a href="jie/detail.html">{$vo.post_title}</a>
+                                <span><i class="iconfont icon-pinglun1"></i> {$vo.comms}</span>
+                            </dd> 
+                        </foreach>
+                    </notempty>
+                      
+                </dl>
+
+                <include file="public@rightside"/>
+
+            </div>
+            
+        </div>
+    </div> 
+
+    <include file="public@footer"/>
+    
+    <!-- /container -->
+    <include file="public@scripts"/>  
+    
+    <script>
+        // 动态加载css
+        // layui.link('路径');
+        
+        // 设备信息
+        var device = layui.device();
+        console.log(device);
+        
+        // 打印错误信息
+        layui.hint().error('console出错啦哦'); 
+        
+        layui.use(['form'], function(){
+            
+            // 表单评论
+            var form = layui.form;
+            
+            form.verify({
+                myurl: function(value) { 
+                    if(value) {
+                        if(!new RegExp("(^#)|(^http(s*):\/\/[^\s]+\.[^\s]+)").test(value)){
+                            return '网址格式错误';
+                        }
+                    }
+                }
+            });
+            
+            form.on('submit(toreply)', function(){
+                return true;
+            });
+            
+            // 回复  
+            
+             
+        });
+        
+        layui.use('element', function(){
+            var element = layui.element;
+
+            //一些事件监听
+            element.on('reply(toreply)', function(data) {
+                console.log(123);
+            });
+        });
+         
+    </script>
+
+</body>
+</html>
+
+
+
+

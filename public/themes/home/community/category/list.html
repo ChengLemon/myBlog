@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{$category.name} {$category.seo_title} {$site_info.site_name|default=''}</title>
+    <meta name="keywords" content="{$category.seo_keywords},{$site_info.site_seo_keywords|default=''}"/>
+    <meta name="description" content="{$category.seo_description},{$site_info.site_seo_description|default=''}">
+    <include file="public@head"/>
+    <hook name="before_head_end"/>
+ 
+</head>
+
+<body class="body-white">
+
+    <include file="public@nav"/> 
+
+    <div class="fly-panel fly-column">
+        <div class="layui-container">
+            <ul class="layui-clear">
+                <li class="layui-hide-xs <if condition='is_null($Request.param.categoryId)'>layui-this</if>" ><a href="/">首页</a></li>  
+                <php>
+                    $where = [ 'parent_id' => 0, 'isshow' => 1 ];
+                </php>
+                <community:categories where="$where" order="list_order">   
+                    <li class='<if condition="$Request.param.categoryId eq $vo.id">layui-this</if>' >
+                        <a href="{:url('category/index', array('categoryId' => $vo.id))}">
+                            {$vo.name}
+                            <if condition="$key eq 1">
+                                <span class="layui-badge-dot"></span>
+                            </if>
+                        </a>
+                    </li> 
+                </community:categories> 
+                
+                <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li> 
+                <!-- 用户登入后显示 -->
+                <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="user/index.html">我发表的贴</a></li> 
+                <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="user/index.html#collection">我收藏的贴</a></li> 
+            </ul> 
+
+            <div class="fly-column-right layui-hide-xs"> 
+                <span class="fly-search"><i class="layui-icon"></i></span> 
+                <a href="/community/article/add.html" class="layui-btn">发表新帖</a> 
+            </div> 
+            <div class="layui-hide-sm layui-show-xs-block" style="margin-top: -10px; padding-bottom: 10px; text-align: center;"> 
+                <a href="/community/article/add.html" class="layui-btn">发表新帖</a> 
+            </div> 
+        </div>
+    </div>
+
+    <div class="layui-container">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md8">
+                <div class="fly-panel" style="margin-bottom: 0;">
+
+                    <div class="fly-panel-title fly-filter">
+                        <a href="{:url('category/index', array('id' => $category.id))}" class="<if condition='is_null($Request.param.isdone)'>layui-this</if>" >综合</a>
+                        <span class="fly-mid"></span>
+                        
+                        <a href="{:url('category/index', array('categoryId' => $category.id, 'isdone' => 2))}" class="<if condition='$Request.param.isdone eq 2'>layui-this</if>">未结</a>
+                        <span class="fly-mid"></span>
+                        
+                        <a href="{:url('category/index', array('categoryId' => $category.id, 'isdone' => 1))}" class="<if condition='$Request.param.isdone eq 1'>layui-this</if>">已结</a>
+                        <span class="fly-mid"></span>
+                        
+                        <span class="fly-filter-right layui-hide-xs">
+                            <a href="{:url('category/index', array('categoryId' => $category.id))}" class="<if condition='is_null($Request.param.sort)'>layui-this</if>">按最新</a>
+                            <span class="fly-mid"></span>
+                            <a href="{:url('category/index', array('categoryId' => $category.id, 'sort' => 'hots'))}" class="<if condition='$Request.param.sort eq "hots"'>layui-this</if>">按热议</a>
+                        </span>
+                    </div>
+
+                    <ul class="fly-list">    
+                        <foreach name='articles' item='vo'>
+                            <li>
+                                <a href="user/home.html" class="fly-avatar">
+                                    <img src="{:cmf_get_image_url($vo.avatar)}" alt="{$vo.user_nickname}">
+                                </a>
+                                <h2>
+                                    <community:category artid="$vo.id" item="vv">   
+                                        <a class="layui-badge">{$vv.name}</a> 
+                                    </community:category> 
+                                     
+                                    <a href="{:url('community/article/detail', array('id' => $vo.id))}">{$vo.post_title}</a>
+                                </h2>
+                                <div class="fly-list-info">
+                                    <a href="user/home.html" link>
+                                        <cite>{$vo.user_nickname}</cite>
+                                        <!--
+                                        <i class="iconfont icon-renzheng" title="认证信息：XXX"></i>
+                                        <i class="layui-badge fly-badge-vip">VIP3</i>
+                                        -->
+                                    </a>
+                                    <span>{$vo.update_time}</span>
+
+                                    <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i> {$vo.post_like}</span>
+                                    <!--<span class="layui-badge fly-badge-accept layui-hide-xs">已结</span>-->
+                                    <span class="fly-list-nums"> 
+                                        <i class="iconfont icon-pinglun1" title="回答"></i> {$vo.comms}
+                                    </span>
+                                </div>
+                                <div class="fly-list-badge">
+                                    <!--<span class="layui-badge layui-bg-red">精帖</span>-->
+                                </div>
+                            </li>
+                        </foreach>
+                    </ul>
+
+                    <!-- <div class="fly-none">没有相关数据</div> -->
+
+                    <div style="text-align: center">
+                        <div class="laypage-main">
+                            <span class="laypage-curr">1</span>
+                            <a href="/jie/page/2/">2</a>
+                            <a href="/jie/page/3/">3</a>
+                            <a href="/jie/page/4/">4</a>
+                            <a href="/jie/page/5/">5</a>
+                            <span>…</span>
+                            <a href="/jie/page/148/" class="laypage-last" title="尾页">尾页</a>
+                            <a href="/jie/page/2/" class="laypage-next">下一页</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <dl class="fly-panel fly-list-one">
+                    
+                    <dt class="fly-panel-title">本周热议</dt> 
+                    
+                    <empty name="$hotsArts">
+                        <div class="fly-none">没有相关数据</div>
+                    </empty>
+                    
+                    <notempty name="$hotsArts">
+                        <foreach name="$hotsArts" item="vo">
+                            <dd>
+                                <a href="jie/detail.html">{$vo.post_title}</a>
+                                <span><i class="iconfont icon-pinglun1"></i> {$vo.comms}</span>
+                            </dd> 
+                        </foreach>
+                    </notempty>
+                      
+                </dl>
+
+                <include file="public@rightside"/>
+
+            </div>
+        </div>
+    </div>
+
+    <include file="public@footer"/>
+    
+    <!-- /container -->
+    <include file="public@scripts"/>  
+
+</body>
+</html>

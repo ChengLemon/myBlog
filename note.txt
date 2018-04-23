@@ -1,0 +1,5 @@
+1. 模块单另须知
+
+    复制模块（controller及template）；
+    后台菜单添加次模块链接（参考文档 https://www.kancloud.cn/thinkcmf/doc/289626）；
+    配置文件修改默认模块（可选）

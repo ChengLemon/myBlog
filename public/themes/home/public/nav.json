@@ -1,0 +1,41 @@
+{
+    "name": "导航条",
+    "action": "public/Nav",
+    "description": "导航条模板文件",
+    "is_public": "1",
+    "order": 1.0,
+    "more": {
+        "vars": {
+            "company_name": {
+                "title": "公司名称",
+                "name": "company_name",
+                "value": "ThinkCMF",
+                "type": "text",
+                "tip": "请输入公司名称",
+                "dataSource": {
+                    "api": "Portal/Category/index",
+                    "multi": false,
+                    "filters": {
+                        "id": {
+                            "title": "导航",
+                            "type": "select",
+                            "placeholder": "请选择导航",
+                            "api": "admin/Nav/index"
+                        },
+                        "keyword": {
+                            "title": "导航名",
+                            "type": "text",
+                            "placeholder": "请输入关键字..."
+                        }
+                    }
+                },
+                "rule": {
+                    "require": true
+                },
+                "message": {
+                    "require": "名称不能为空"
+                }
+            }
+        }
+    }
+}

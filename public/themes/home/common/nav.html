@@ -1,0 +1,131 @@
+<div class="fly-header layui-bg-black">
+    <div class="layui-container">
+        <a class="fly-logo" href="/">
+            <img src="{:cmf_get_image_preview_url($site_info.site_logo)}" alt="layui">
+        </a>
+        <ul class="layui-nav fly-nav layui-hide-xs">
+            <li class="layui-nav-item layui-this">
+                <a href="/"><i class="iconfont icon-jiaoliu"></i>交流</a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="case/case.html"><i class="iconfont icon-iconmingxinganli"></i>案例</a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="http://www.layui.com/" target="_blank"><i class="iconfont icon-ui"></i>框架</a>
+            </li>
+        </ul>
+
+        <ul class="layui-nav fly-nav-user">
+
+            <!-- 未登入的状态 -->
+            <li class="layui-nav-item">
+                <a class="iconfont icon-touxiang layui-hide-xs" href="user/login.html"></a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="user/login.html">登入</a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="user/reg.html">注册</a>
+            </li> 
+            <hook name="wx_login"/> 
+
+            <!-- 登入后的状态 -->
+            <!--
+            <li class="layui-nav-item">
+              <a class="fly-nav-avatar" href="javascript:;">
+                <cite class="layui-hide-xs">贤心</cite>
+                <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
+                <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
+                <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg">
+              </a>
+              <dl class="layui-nav-child">
+                <dd><a href="user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+                <dd><a href="user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+                <dd><a href="user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+                <hr style="margin: 5px 0;">
+                <dd><a href="/user/logout/" style="text-align: center;">退出</a></dd>
+              </dl>
+            </li>
+            -->
+        </ul>
+    </div>
+</div>
+
+<!--<nav class="navbar navbar-default navbar-fixed-top active">
+    <div class="container active">
+        <div class="navbar-header" >
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="__ROOT__/" style="padding-top: 10px;">
+                <if condition="$site_info.site_logo neq null">
+                    <img src="{:cmf_get_image_preview_url($site_info.site_logo)}"/>
+                <else/>
+                    {$theme_vars.company_name|default='ThinkCMF'}
+                </if> 
+            </a>
+        </div>
+
+        <div class="collapse navbar-collapse active" id="bs-example-navbar-collapse-1">
+            <ul id="main-menu" class="nav navbar-nav" >
+                <navigation nav-id="" root="" id="main-navigation" class="nav navbar-nav navbar-nav-custom" max-level="0">
+                    <navigationMenu root="li" class="menu-item menu-item-level-{$level}">
+                        <a href="{$menu.href|default=''}" target="{$menu.target|default=''}" style="background: none;">
+                            {$menu.name|default=''}
+                        </a>
+                    </navigationMenu>
+                    <navigationFolder root="li" class="dropdown dropdown-custom dropdown-custom-level-{$level}" dropdown="ul" dropdown-class="dropdown-menu dropdown-menu-level-{$level}">
+                        <a href="#" class="dropdown-toggle dropdown-toggle-{$level}" data-toggle="dropdown">
+                            {$menu.name|default=''}<span class="caret"></span>
+                        </a>
+                    </navigationFolder>
+                </navigation>
+            </ul>
+            <ul class="nav navbar-nav navbar-right" id="main-menu-user">
+                
+                <li class="login">
+                    <a class="dropdown-toggle notifactions" href="/index.php/user/notification/index"> <i
+                            class="fa fa-envelope"></i> <span class="count">0</span></a>
+                </li>
+                
+                <li class="dropdown user login">
+                    <a class="dropdown-toggle user" data-toggle="dropdown" href="#">
+                        <php>$user=cmf_get_current_user();</php>
+                        <if condition="empty($user['avatar'])">
+                            <img src="__TMPL__/public/assets/images/headicon.png" class="headicon">
+                            <else/>
+                            <img src="{:cmf_get_user_avatar_url($user['avatar'])}" class="headicon" width="30"/>
+                        </if>
+                        <span class="user-nickname"></span><b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a href="{:cmf_url('user/Profile/center')}"><i class="fa fa-user"></i> &nbsp;个人中心</a></li>
+                        <li class="divider"></li>
+                        <li><a href="{:cmf_url('user/Index/logout')}"><i class="fa fa-sign-out"></i> &nbsp;退出</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown user offline" style="display: list-item;">
+                    <a class="dropdown-toggle user" data-toggle="dropdown" href="#">
+                        <img src="__TMPL__/public/assets/images/headicon.png" class="headicon">
+                        登录<b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a href="{:cmf_url('user/Login/index')}"><i class="fa fa-sign-in"></i> &nbsp;登录</a></li>
+                        <li class="divider"></li>
+                        <li><a href="{:cmf_url('user/Register/index')}"><i class="fa fa-user"></i> &nbsp;注册</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <form class="navbar-form navbar-right" method="post" action="{:cmf_url('portal/Search/index')}">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="keyword" placeholder="Search" value="{:input('param.keyword','')}" style="border-radius: 25px;">
+                </div>
+                <input type="submit" class="btn btn-primary" value="Go" style="margin:0"/>
+            </form>
+        </div>
+    </div>
+</nav>-->
