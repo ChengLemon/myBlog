@@ -1,0 +1,45 @@
+<include file="public@header" />
+</head>
+<body>
+    <div class="wrap js-check-wrap">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#A" data-toggle="tab">{:lang('POST_SETTING')}</a></li> 
+        </ul>
+        <form class="form-horizontal js-ajax-form margin-top-20" role="form" action="{:url('AdminSet/setPost')}" method="post">
+            <fieldset>
+                <div class="tabbable">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="A"> 
+
+                            <div class="form-group">
+                                <label for="input-isleaveMsg" class="col-sm-2 control-label">{:lang('LEAVE_MSG')}</label>
+                                <div class="col-md-6 col-sm-10">  
+                                    
+                                    <select class="form-control" name="options[isleaveMsg]">
+                                        <option value="0">禁止</option>
+                                        <php>$open_isleaveMsg = empty($isleaveMsg) ? '' : 'selected';</php>
+                                        <option value="1" {$open_isleaveMsg}>允许</option>
+                                    </select>
+                                    
+                                    <p class='help-block'>默认开启</p>
+                                    
+                                </div> 
+                                
+                            </div>
+ 
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-primary js-ajax-submit" data-refresh="1">{:lang('SAVE')}</button>
+                                </div>
+                            </div>
+                            
+                        </div> 
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+    </div>
+    <script type="text/javascript" src="__STATIC__/js/admin.js"></script>
+</body>
+</html>

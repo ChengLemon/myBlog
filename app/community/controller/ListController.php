@@ -12,8 +12,9 @@ namespace app\community\controller;
 
 use cmf\controller\HomeBaseController;
 use app\community\model\CommunityCategoryModel;
+use app\community\controller\BaseController;
 
-class ListController extends HomeBaseController
+class ListController extends BaseController
 {
     public function index()
     {

@@ -194,7 +194,7 @@ class CommunityArticleModel extends Model
             ->where($where) 
             ->find(); 
         
-        if(!empty($article) ) { 
+        if(!empty($detail) ) { 
             $data['article'] = $article;
             
             // 浏览量+1 
@@ -384,6 +384,7 @@ class CommunityArticleModel extends Model
         $data['post_status'] = empty($data['post_status']) ? 0 : 1;
         $data['is_top']      = empty($data['is_top']) ? 0 : 1;
         $data['recommended'] = empty($data['recommended']) ? 0 : 1;
+        $data['comment_status'] = empty($data['comment_status']) ? 0 : 1;
 
         $this->allowField(true)->isUpdate(true)->data($data, true)->save();
 

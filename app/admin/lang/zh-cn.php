@@ -79,6 +79,7 @@ return [
     'WEBSITE_COMPANY_NAME'               => '公司名称',    
     "WEBMASTER_EMAIL"                    => '站长邮箱',
     "WEBSITE_STATISTICAL_CODE"           => '统计代码',
+    "WEBSITE_LOGO_TEXT"                  => 'LOGO名称',
     "WEBSITE_LOGO_LABEL"                 => '网站logo',
     "WEBSITE_QR_LABEL"                   => '联系二维码',
     "WEBSITE_COPYRIGHT_INFOMATION"       => '版权信息',

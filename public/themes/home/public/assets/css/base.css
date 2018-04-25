@@ -13,3 +13,9 @@ and open the template in the editor.
         margin-right: 15% !important;
     }
 }
+
+.fly-logo-text {
+    font-size: 35px;
+    font-family: 'Times New Roman', Georgia, Serif;
+    color: #009688;
+}

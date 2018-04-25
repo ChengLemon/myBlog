@@ -1,8 +1,16 @@
 <div class="fly-header layui-bg-black">
     <div class="layui-container">
-        <a class="fly-logo" href="/">
-            <img src="{:cmf_get_image_preview_url($site_info.site_logo)}" alt="layui">
-        </a>
+         
+        <if condition = "$site_info.site_logo_text neq null">
+            <a class="fly-logo fly-logo-text" href="/" >
+                <p>{$site_info.site_logo_text}</p>
+            </a>
+        <elseif condition = "$site_info.site_logo neq null" />
+            <a class="fly-logo" href="/">
+                <img src="{:cmf_get_image_preview_url($site_info.site_logo)}" alt="layui">
+            </a>
+        </if>
+         
         <ul class="layui-nav fly-nav layui-hide-xs">
             <li class="layui-nav-item layui-this">
                 <a href="/"><i class="iconfont icon-jiaoliu"></i>交流</a>

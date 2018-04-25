@@ -22,6 +22,10 @@ class BaseController extends HomeBaseController {
         parent::_initialize();
         $articleModel = new CommunityArticleModel();
         
+        // 社区设置
+        $community_options = cmf_get_community_option('post_settings'); 
+        View::share('community_options', $community_options);
+        
         // 本周热议
         $nums = 0; // 暂定0
         $hotsArts = $articleModel->getHots($nums);

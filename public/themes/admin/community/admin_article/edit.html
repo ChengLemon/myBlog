@@ -188,9 +188,10 @@
                     <tr>
                         <th>状态</th>
                         <php>
-                            $status_yes=$post['post_status']==1?"checked":"";
-                            $is_top_yes=$post['is_top']==1?"checked":"";
-                            $recommended_yes=$post['recommended']==1?"checked":"";
+                            $status_yes = $post['post_status'] == 1 ? "checked" : "";
+                            $is_top_yes = $post['is_top'] == 1 ? "checked" : "";
+                            $recommended_yes = $post['recommended'] == 1 ? "checked" : "";
+                            $comment_status_yes = $post['comment_status'] == 1 ? "checked" : "";
                         </php>
                     </tr>
                     <tr>
@@ -214,6 +215,15 @@
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="post[recommended]" value="1" {$recommended_yes}>推荐
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="post[comment_status]" value="1" {$comment_status_yes}>允许评论
                                 </label>
                             </div>
                         </td>

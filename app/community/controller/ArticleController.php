@@ -14,9 +14,10 @@ use app\community\model\CommunityArticleModel;
 use app\community\validate\AdminArticleValidate;
 use app\community\model\CommunityCommentModel;
 use think\captcha\Captcha;
+use app\community\controller\BaseController;
 use think\Env;
 
-class ArticleController extends HomeBaseController {
+class ArticleController extends BaseController {
 
     public function add() { 
         return $this->fetch('/article/add');

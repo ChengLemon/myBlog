@@ -11,8 +11,9 @@ namespace app\community\controller;
 use cmf\controller\HomeBaseController;
 use app\community\model\CommunityCategoryModel;
 use app\community\model\CommunityArticleModel;
+use app\community\controller\BaseController;
 
-class CategoryController extends HomeBaseController {
+class CategoryController extends BaseController {
 
     public function index() {
         $param = $this->request->param();

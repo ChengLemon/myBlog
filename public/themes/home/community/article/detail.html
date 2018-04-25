@@ -80,7 +80,7 @@
                              <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="0" style="background-color:#ccc;">取消加精</span> 
                         </div>-->
                         <span class="fly-list-nums"> 
-                            <a href="#comment"><i class="iconfont" title="回答">&#xe60c;</i> {$data['article']['comms']}</a>
+                            <a href="#comment_container"><i class="iconfont" title="回答">&#xe60c;</i> {$data['article']['comms']}</a>
                             <i class="iconfont" title="人气">&#xe60b;</i> {$data['article']['post_hits']}
                         </span>
                     </div>
@@ -103,7 +103,7 @@
                         <div class="detail-hits" id="LAY_jieAdmin" data-id="123">
                             <!--<span style="padding-right: 10px; color: #FF7200">悬赏：60飞吻</span>-->  
                             <span class="layui-btn layui-btn-xs jie-admin layui-bg-black" type="edit">
-                                <a href="#comments" name="comments">评论</a>
+                                <a href="#comment_container">评论</a>
                             </span>
                         </div>
                     </div>
@@ -120,13 +120,13 @@
                             </foreach> 
                         </notempty>
                         <empty name="$data['postTags']">
-                            <span class="layui-badge layui-bg-green fly-detail-column">**</span>
+                            <span class="layui-badge layui-bg-green fly-detail-column">##</span>
                         </empty>  
                     </div>
                     
                 </div>
 
-                <div class="fly-panel detail-box" id="flyReply" name="comments">
+                <div class="fly-panel detail-box" id="comment_container">
                     <fieldset class="layui-elem-field layui-field-title" style="text-align: center;">
                         <legend>回帖</legend>
                     </fieldset>
@@ -177,10 +177,12 @@
                                         <i class="iconfont icon-zan"></i>
                                         <em>{$vo['like']}</em>
                                     </span> -->
-                                    <span class="layui-reply" lay-filter="toreply" >
-                                        <i class="iconfont icon-svgmoban53"></i>
-                                        回复
-                                    </span>
+                                    <a href="#replyDiv" class="reply-btn" data-commentid="{$vo['id']}" data-name="{$vo['full_name']}">
+                                        <span>
+                                            <i class="iconfont icon-svgmoban53"></i>
+                                            回复
+                                        </span>
+                                    </a>
                                     <!-- <div class="jieda-admin">
                                         <span type="edit">编辑</span>
                                         <span type="del">删除</span>
@@ -198,44 +200,49 @@
                     </ul>
                     <fieldset class="layui-elem-field layui-field-title" style="text-align: center;">
                         <legend></legend>
-                    </fieldset>
-                    <div class="layui-form layui-form-pane">
-                        <form action="/community/article/reply" method="post">
-                            
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">名纸：</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="full_name" required lay-verify="required" placeholder="你的名纸" autocomplete="off" class="layui-input" value="cheng">
-                                </div>
-                            </div>
+                    </fieldset> 
+                    <notempty name='$community_options.isleaveMsg'>
+                        <notempty name="$data['article']['comment_status']">
+                            <div class="layui-form layui-form-pane" id="replyDiv">
+                                <form action="/community/article/reply" method="post">
 
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">Email：</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="email" required lay-verType="tips" lay-verify="required|email" placeholder="你的邮箱" autocomplete="off" class="layui-input" value="1159@qq.com">
-                                </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">名纸：</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="full_name" required lay-verify="required" placeholder="你的名纸" autocomplete="off" class="layui-input" value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">Email：</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="email" required lay-verType="tips" lay-verify="required|email" placeholder="你的邮箱" autocomplete="off" class="layui-input" value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">Url：</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="iturl" lay-verify="myurl" placeholder="你的网址" autocomplete="off" class="layui-input">
+                                        </div>
+                                        <!--<div class="layui-form-mid layui-word-aux">您的网址</div>-->
+                                    </div>
+
+                                    <div class="layui-form-item layui-form-text">   
+                                        <div class="layui-input-block"> 
+                                            <textarea id="L_content" name="content" required lay-verify="required" placeholder="请输入内容" class="layui-textarea fly-editor" style="height: 150px;"></textarea>
+                                        </div>
+                                    </div> 
+
+                                    <div class="layui-form-item">
+                                        <input type="hidden" name="object_id" value="{$data['article']['articleId']}">
+                                        <input type="hidden" name="parent_id" value="">
+                                        <button class="layui-btn" lay-filter="toreply" lay-submit>提交回复</button>
+                                    </div>
+                                </form>
                             </div>
-                            
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">Url：</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="iturl" lay-verify="myurl" placeholder="你的网址" autocomplete="off" class="layui-input">
-                                </div>
-                            </div>
-                            
-                            <div class="layui-form-item layui-form-text">
-                                <a name="comment"></a>
-                                <div class="layui-input-block">
-                                    <textarea id="L_content" name="content" required lay-verify="required" placeholder="请输入内容"  class="layui-textarea fly-editor" style="height: 150px;">123</textarea>
-                                </div>
-                            </div> 
-                            
-                            <div class="layui-form-item">
-                                <input type="hidden" name="object_id" value="{$data['article']['articleId']}">
-                                <button class="layui-btn" lay-filter="toreply" lay-submit>提交回复</button>
-                            </div>
-                        </form>
-                    </div>
+                        </notempty>
+                    </notempty>
                     
                 </div>
                 
@@ -283,9 +290,9 @@
         console.log(device);
         
         // 打印错误信息
-        layui.hint().error('console出错啦哦'); 
+        // layui.hint().error('console出错啦哦'); 
         
-        layui.use(['form'], function(){
+        layui.use(['form', 'element'], function(){
             
             // 表单评论
             var form = layui.form;
@@ -304,19 +311,21 @@
                 return true;
             });
             
-            // 回复  
+            // jquery
+            // var $ = layui.$;
+            // $('body').append('123213123123'); 
+
+            // 回复留言
+            $('.reply-btn').on('click', function() {
+                var parent_id = $(this).data('commentid');
+                var name = '@' + $(this).data('name') + ' ';
+                $('[name="parent_id"]').val(parent_id);
+                $('#L_content').val( name ); 
+                $('#L_content').focus(); 
+            }); 
             
              
-        });
-        
-        layui.use('element', function(){
-            var element = layui.element;
-
-            //一些事件监听
-            element.on('reply(toreply)', function(data) {
-                console.log(123);
-            });
-        });
+        });  
          
     </script>
 

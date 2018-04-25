@@ -10,8 +10,9 @@ namespace app\community\controller;
 
 use think\Controller;
 use cmf\controller\HomeBaseController;
+use app\community\controller\BaseController;
 
-class TestController extends HomeBaseController {
+class TestController extends BaseController {
 
     public function test() {  
         cmf_user_action('testset');
