@@ -78,7 +78,7 @@
                                         <a class="layui-badge">{$vv.name}</a> 
                                     </community:category> 
                                     
-                                    <a class="layui-elip" href="{:url('community/article/detail', array('id' => $vo.id))}">{$vo.post_title}</a>
+                                    <a class="layui-elip" href="detail/{$vo.id}">{$vo.post_title}</a>
                                     
                                 </h2>
                                 <div class="fly-list-info">
@@ -119,7 +119,7 @@
                     <ul class="fly-panel-main fly-list-static">
                         <foreach name="$rightArts" item="vo">
                             <li>
-                                <a class="layui-elip" href="{:url('community/article/detail', array('id' => $vo.id))}" target="_blank">{$vo.post_title}</a>
+                                <a class="layui-elip" href="detail/{$vo.id}" target="_blank">{$vo.post_title}</a>
                             </li> 
                         </foreach>
                     </ul>
@@ -185,7 +185,7 @@
                     <notempty name="$hotsArts">
                         <foreach name="$hotsArts" item="vo">
                             <dd>
-                                <a class="layui-elip" href="{:url('community/article/detail', array('id' => $vo.id))}">{$vo.post_title}</a>
+                                <a class="layui-elip" href="detail/{$vo.id}">{$vo.post_title}</a>
                                 <span><i class="iconfont icon-pinglun1"></i> {$vo.comms}</span>
                             </dd> 
                         </foreach>

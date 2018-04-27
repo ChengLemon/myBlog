@@ -80,7 +80,7 @@
                                         <a class="layui-badge">{$vv.name}</a> 
                                     </community:category> 
                                      
-                                    <a href="{:url('community/article/detail', array('id' => $vo.id))}">{$vo.post_title}</a>
+                                    <a href="detail/{$vo.id}">{$vo.post_title}</a>
                                 </h2>
                                 <div class="fly-list-info">
                                     <a href="user/home.html" link>
@@ -134,7 +134,7 @@
                     <notempty name="$hotsArts">
                         <foreach name="$hotsArts" item="vo">
                             <dd>
-                                <a href="jie/detail.html">{$vo.post_title}</a>
+                                <a href="detail/{$vo.id}">{$vo.post_title}</a>
                                 <span><i class="iconfont icon-pinglun1"></i> {$vo.comms}</span>
                             </dd> 
                         </foreach>
