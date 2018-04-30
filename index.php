@@ -42,3 +42,5 @@ require CMF_ROOT . 'simplewind/thinkphp/base.php';
 
 // 执行应用
 \think\App::run()->send();
+
+// echo 123; exit;
