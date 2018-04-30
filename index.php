@@ -9,6 +9,7 @@
 
 // [ 入口文件 ]
 
+// echo 321; exit;
 //phpinfo();
 //exit;
 
