@@ -3,9 +3,8 @@
 .project
 .settings
 .idea 
-composer.lock 
-/nbproject
-/simplewind 
-/api
-/public/api
-/nbproject 
+composer.lock  
+/simplewind/ 
+/api/
+/public/api/
+/nbproject/
