@@ -12,4 +12,5 @@ composer.lock
 /update/  
 .tags
 .tags_sorted_by_file
-/data/conf/
+/data/conf/database.php
+/data/conf/config.php
