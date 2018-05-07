@@ -3,6 +3,8 @@
 .project
 .settings
 .idea 
+.tags
+.tags_sorted_by_file
 composer.lock  
 /simplewind/ 
 /api/
@@ -10,7 +12,4 @@ composer.lock
 /nbproject/
 /data/runtime/
 /update/  
-.tags
-.tags_sorted_by_file
-/data/conf/database.php
-/data/conf/config.php
+/data/conf/
