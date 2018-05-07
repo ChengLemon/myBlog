@@ -11,5 +11,6 @@ composer.lock
 /public/api/
 /nbproject/
 /data/runtime/
-/update/  
 /data/conf/
+/data/conf/database.php
+/update/  
