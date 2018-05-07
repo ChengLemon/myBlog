@@ -12,7 +12,7 @@
 
 namespace app\community\service;
 
-use app\Community\model\CommunityCategoryModel;
+use app\community\model\CommunityCategoryModel;
 use app\community\model\CommunityArticleModel; 
 
 class ApiService {
